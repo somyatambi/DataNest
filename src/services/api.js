@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://datanest-icj1.onrender.com/api', // Render wala link yaha aayega
   headers: { 'Content-Type': 'application/json' }
 });
 
