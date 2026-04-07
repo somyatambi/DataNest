@@ -1,61 +1,29 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
+import db from '../db.js';
 
-export const protect = async (req, res, next) => {
-  let token;
+const JWT_SECRET = process.env.JWT_SECRET || 'growthcast_secret_2024';
 
-  // Check for token in headers
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1];
+export const protect = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ success: false, message: 'Please log in to continue' });
   }
-
-  // Check if token exists
-  if (!token) {
-    return res.status(401).json({
-      success: false,
-      message: 'Not authorized to access this route'
-    });
-  }
-
+  const token = authHeader.split(' ')[1];
   try {
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // Get user from token
-    req.user = await User.findById(decoded.id).select('-password');
-
-    if (!req.user) {
-      return res.status(401).json({
-        success: false,
-        message: 'User not found'
-      });
-    }
-
-    if (!req.user.isActive) {
-      return res.status(401).json({
-        success: false,
-        message: 'User account is deactivated'
-      });
-    }
-
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = db.prepare('SELECT id, name, email, company, role, files_processed FROM users WHERE id = ?').get(decoded.id);
+    if (!user) return res.status(401).json({ success: false, message: 'User not found' });
+    req.user = user;
     next();
   } catch (error) {
-    return res.status(401).json({
-      success: false,
-      message: 'Not authorized to access this route'
-    });
+    return res.status(401).json({ success: false, message: 'Invalid or expired token' });
   }
 };
 
-// Check if user is admin
-export const authorize = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({
-        success: false,
-        message: `User role ${req.user.role} is not authorized to access this route`
-      });
-    }
+export const adminOnly = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
     next();
-  };
+  } else {
+    return res.status(403).json({ success: false, message: 'Admin access required' });
+  }
 };

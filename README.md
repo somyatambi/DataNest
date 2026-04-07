@@ -1,117 +1,58 @@
-# GrowthCast - Business Analytics & Data Cleaning Platform
+# DataNest - Smart Excel Report and Dashboard System
 
-A clean, intuitive SaaS platform for small business and factory owners to clean Excel files, visualize business data, and predict future growth.
-
-## 🚀 Features
-
-### 1. 🧹 Excel File Cleaning (✅ LIVE)
-Automatically clean your Excel files with 13 powerful operations:
-- Remove duplicates
-- Handle missing values
-- Trim extra spaces
-- Convert data types
-- Standardize date formats
-- Fix text case
-- Remove blank rows/columns
-- Validate data (email, phone, numbers)
-- Merge multiple sheets
-- Normalize column names
-- Find & replace
-- Filter unwanted data
-- Sort data
-
-**All cleaning is non-AI based and happens in your browser!**
-
-### 2. � Admin Dashboard (Coming Soon)
-- View all uploaded files
-- Track cleaning history
-- Manage reports
-- User settings
-
-### 3. 📈 Predictive Analysis (Coming Soon)
-- AI-powered business forecasts
-- 3, 6, and 12-month predictions
-- Confidence intervals
-- Trend analysis
-
-### 4. 📄 Report Generation (Coming Soon)
-- Generate professional reports from Excel
-- Custom templates
-- Charts and visualizations
-- Export to PDF
+A web application to upload Excel files, clean the data automatically, view charts, and download cleaned results.
 
 ## Tech Stack
+- **Frontend:** React, Vite, Tailwind CSS, Chart.js
+- **Backend:** Node.js, Express.js
+- **Database:** SQLite (via sql.js - no installation required)
+- **Auth:** JWT tokens
 
-- **React** - UI Framework
-- **Vite** - Build tool
-- **Tailwind CSS** - Styling
-- **Chart.js** - Data visualization
-- **Heroicons** - Icon library
+## How to Run
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v16 or higher)
-- npm or yarn
-
-### Installation
-
-1. Install dependencies:
+### 1. Install dependencies
 ```bash
+# Root (frontend)
 npm install
+
+# Backend
+cd server
+npm install
+cd ..
 ```
 
-2. Run the development server:
+### 2. Start the backend server
+```bash
+cd server
+node index.js
+```
+Server runs on http://localhost:5000
+
+### 3. Start the frontend
 ```bash
 npm run dev
 ```
+App runs on http://localhost:5173
 
-3. Open your browser and navigate to `http://localhost:5173`
+### 4. Open http://localhost:5173 in your browser
 
-### Build for Production
+## Features
+- **Landing Page** — Feature overview with signup/login
+- **Signup/Login** — JWT-based secure authentication
+- **Employee Dashboard:**
+  - Upload Excel (.xlsx or .xls) files
+  - Clean data (remove duplicates, fill missing values, trim spaces)
+  - View cleaned data in a table with charts
+  - Download cleaned Excel file
+  - View file history
+- **Admin Dashboard:**
+  - View all users and manage roles
+  - View global file history
+  - Charts for activity overview
 
-```bash
-npm run build
-```
+## Database (SQLite)
+The database file `growthcast.db` is created automatically in the project root on first run.  
+Tables: `users`, `file_history`
 
-### Preview Production Build
-
-```bash
-npm run preview
-```
-
-## Project Structure
-
-```
-GrowthCast/
-├── src/
-│   ├── components/
-│   │   ├── Header.jsx
-│   │   ├── FileUpload.jsx
-│   │   ├── Dashboard.jsx
-│   │   ├── KPICard.jsx
-│   │   ├── ReportChart.jsx
-│   │   └── ForecastTable.jsx
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-├── index.html
-├── package.json
-├── vite.config.js
-├── tailwind.config.js
-└── postcss.config.js
-```
-
-## Components
-
-- **Header** - Application header with logo and user profile
-- **FileUpload** - Drag-and-drop file upload interface
-- **Dashboard** - Main dashboard view with all metrics
-- **KPICard** - Reusable card for displaying key metrics
-- **ReportChart** - Chart component using Chart.js
-- **ForecastTable** - Table displaying growth predictions
-
-## License
-
-MIT
+## Default Test Accounts
+After running the server for the first time, sign up via the UI. Select **Admin** role when creating an admin account.
